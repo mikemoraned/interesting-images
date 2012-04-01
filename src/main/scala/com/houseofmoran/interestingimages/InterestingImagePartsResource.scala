@@ -11,7 +11,7 @@ import java.net.URI
 import java.util.logging._
 import java.awt.image.BufferedImage
 
-@Path("/projects/interesting/")
+@Path("/")
 class InterestingImagePartsResource {
 
   val logger = Logger.getLogger(this.getClass.getName)
@@ -34,7 +34,7 @@ class InterestingImagePartsResource {
 	 	  "animated-jpeg"         -> Interesting.animated(jpeg))
 	 	  
   @GET
-  @Path("image/{spec: [a-z-]+}/{uri: .+}")
+  @Path("/{spec: [a-z-]+}/{uri: .+}")
   @Produces(Array("image/png"))
   def transformToImage(@PathParam("spec") spec: String, @PathParam("uri") uri: URI) = {
 	  logger.info("uri: " + uri)
@@ -49,7 +49,7 @@ class InterestingImagePartsResource {
   }
 
   @GET
-  @Path("image/{spec: animated[a-z-]*}/{uri: .+}")
+  @Path("/{spec: animated[a-z-]*}/{uri: .+}")
   @Produces(Array("image/gif"))
   def animate(@PathParam("spec") spec: String, @PathParam("uri") uri: URI) = {
 	  logger.info("uri: " + uri)

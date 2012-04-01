@@ -17,7 +17,8 @@ libraryDependencies ++= Seq(
    "org.eclipse.jetty" % "jetty-webapp" % "7.6.2.v20120308",
    "com.sun.jersey" % "jersey-core" % "1.8",
    "com.sun.jersey" % "jersey-server" % "1.8",
-   "com.sun.jersey" % "jersey-json" % "1.8"
+   "com.sun.jersey" % "jersey-json" % "1.8",
+   "javax.servlet" % "servlet-api" % "2.5"
 )
 
 ivyXML := 
