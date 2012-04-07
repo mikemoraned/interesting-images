@@ -1,6 +1,6 @@
 {
   "name": "Composition Grid Overlay",
-  "version": "0.1",
+  "version": "0.2",
   "description": "Overlay Composition Grids",
   "browser_action": {
     "default_icon": "icon.png"
@@ -10,7 +10,7 @@
   "content_scripts": [
     {
       "matches": ["http://www.flickr.com/*"],
-      "js": ["js/jquery-1.4.2.js", "js/flickr.contentScript.js"]
+      "js": ["js/jquery-1.7.2.js", "js/flickr.contentScript.js"]
     }
   ]
 }
