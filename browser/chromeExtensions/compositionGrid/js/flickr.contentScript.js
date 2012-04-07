@@ -1,26 +1,18 @@
 console.log("flickr content script loaded")
 
-$("div.photo-div img").each(function (i) {
-    var src = $(this).attr("src");
-    console.log("img src: " + src);
-    var img = new Image();
-    img.src = src;
-    console.log("Created Image");
-    var imgElem = $(this);
-    var parentDiv = $(this).parent();
-    img.onload = function() {
-	parentDiv.append("<canvas id='canvas' width=\"" + img.width + "\" height=\"" + img.height + "\" />");
-	var canvas = document.getElementById("canvas");
-	console.log("Created canvas");
+var img;
+
+function draw() {
+    var canvas = document.getElementById("canvas");
+    if (img && canvas) {
+	console.log("Found canvas and image");
 	var context = canvas.getContext("2d");
 	context.drawImage(img, 0, 0);
 	console.log("Drew image in canvas");
-	imgElem.css("display","none");
-	console.log("Hid original image");
 	drawRuleOfThirdsOverlay(context, img.width, img.height);
 	drawDiagonalMethodOverlay(context, img.width, img.height);
     }
-});
+}
 
 function drawRuleOfThirdsOverlay(context, width, height) {
     var grid = [[[0.0,  0.33], [1.0,  0.33]],
@@ -56,3 +48,21 @@ function drawDiagonalMethodOverlay(context, width, height) {
     context.strokeStyle = "#f00";
     context.stroke();
 }
+
+$("div.photo-div img").each(function (i) {
+    var src = $(this).attr("src");
+    console.log("img src: " + src);
+    img = new Image();
+    img.src = src;
+    console.log("Created Image");
+    var imgElem = $(this);
+    var parentDiv = $(this).parent();
+    img.onload = function() {
+	parentDiv.append("<canvas id='canvas' width=\"" + img.width + "\" height=\"" + img.height + "\" />");
+	console.log("Created canvas");
+	imgElem.css("display","none");
+	console.log("Hid original image");
+	draw();
+    }
+});
+
