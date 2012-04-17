@@ -18,7 +18,8 @@ libraryDependencies ++= Seq(
    "com.sun.jersey" % "jersey-core" % "1.8",
    "com.sun.jersey" % "jersey-server" % "1.8",
    "com.sun.jersey" % "jersey-json" % "1.8",
-   "javax.servlet" % "servlet-api" % "2.5"
+   "javax.servlet" % "servlet-api" % "2.5",
+   "commons-io" % "commons-io" % "2.2"
 )
 
 ivyXML := 

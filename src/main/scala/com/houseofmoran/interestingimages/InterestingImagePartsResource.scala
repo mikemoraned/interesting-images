@@ -4,17 +4,22 @@ import javax.ws.rs._
 import javax.ws.rs.core._
 import javax.imageio._
 
-import java.io.ByteArrayOutputStream
+import java.io._
 
 import java.net.URI
 
 import java.util.logging._
 import java.awt.image.BufferedImage
 
+import org.apache.commons.io.output.ThresholdingOutputStream
+import org.apache.commons.io.IOUtils
+
 @Path("/")
 class InterestingImagePartsResource {
 
   val logger = Logger.getLogger(this.getClass.getName)
+
+  val IMAGE_SIZE_LIMIT = 1024 * 1024 * 10;
   
   val gzip = new GzipStreamEstimator
   val jpeg = new JpegSizeEstimator
@@ -63,7 +68,7 @@ class InterestingImagePartsResource {
   
   def loadImage(uri: URI) = {
     try {
-      ImageIO.read(uri.toURL)
+      ImageIO.read(loadBytes(uri, IMAGE_SIZE_LIMIT))
     }
     catch {
       case e: IIOException => {
@@ -72,6 +77,29 @@ class InterestingImagePartsResource {
 	 	 			  .`type`(MediaType.TEXT_PLAIN_TYPE)
 	 	 			  .entity("Can't find " + uri).build)
       }
+    }
+  }
+
+  def loadBytes(uri: URI, sizeLimit: Int) = {
+    val in = uri.toURL.openStream();
+    try {
+      val bout = new ByteArrayOutputStream();
+      IOUtils.copy(in, new ThresholdingOutputStream(sizeLimit) {
+	def getStream() = bout
+	def thresholdReached() = throw new ByteLimitReachedIOException(sizeLimit);
+      });
+      new ByteArrayInputStream(bout.toByteArray())
+    }
+    catch {
+      case e: ByteLimitReachedIOException => {
+	logger.log(Level.WARNING, "Couldn't load: " + e)
+	throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+	 	 			  .`type`(MediaType.TEXT_PLAIN_TYPE)
+	 	 			  .entity("Image at uri is too large: " + uri).build)
+      }
+    }
+    finally {
+      IOUtils.closeQuietly(in)
     }
   }
 }
