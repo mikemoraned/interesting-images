@@ -39,19 +39,22 @@ class InterestingImagePartsResource {
 	"animated-jpeg"         -> Interesting.animated(jpeg))
   
   @GET
-  @Path("/all/{uri: .+}")
+  @Path("/compressability/{uri: .+}")
   @Produces(Array("text/html"))
   def all(@PathParam("uri") uri: URI) = {
     <html>
     <head>
-    <title>Interesting parts of {uri}</title>
+    <title>'Interesting' parts of {uri}</title>
     </head>
     <body>
     <h1>{uri}</h1>
-    <h2>Transformations</h2>
-    { for (name <- imageTransformers.keys.toList.sorted) yield <p><img src={"/" + name + "/" + uri} title={name} /></p> }
-    <h2>Animated</h2>
-    { for (name <- imageAnimators.keys.toList.sorted) yield <p><img src={"/" + name + "/" + uri} title={name} /></p> }
+    <p>The images and animations below illustrate how a simple compressor at the image or byte level (e.g. jpeg or gzip) can be used to highlight the most 'interesting' parts of an image. All very simplistic, I know, but I wanted to see how well it could capture the information content of a image.</p>
+    <h2>Images</h2>
+    <p>The overlayed annuli below visualise the compressability of an image block. The inner radius represents the minimum compressed size of <em>any</em> block, whilst the outer radius is the compressed size of the block it is over.</p>
+    { for (name <- imageTransformers.keys.toList.sorted) yield { <h3>{name}</h3><img src={"/" + name + "/" + uri} title={name} /> } }
+    <h2>Animations</h2>
+    <p>The animations show each block in reverse order of compressability i.e. least-complex first.</p>
+    { for (name <- imageAnimators.keys.toList.sorted) yield { <h3>{name}</h3><img src={"/" + name + "/" + uri} title={name} /> } }
     </body>
     </html>.toString()
   }

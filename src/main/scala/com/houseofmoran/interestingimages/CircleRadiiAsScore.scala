@@ -28,7 +28,6 @@ class CircleRadiiAsScore extends InterestingRegionHighlighter[Rectangle2D, Buffe
     useGraphics(highlighted) { g2 =>
       g2.drawRenderedImage(image, IDENTITY)
     }
-    
 
     for((rect, score) <- regions) {
     	new Annulus(minScore / maxScore, score / maxScore).drawIn(highlighted, rect)
