@@ -4,30 +4,34 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 
-	<filter>
-		<filter-name>jersey-services</filter-name>
-		<filter-class>com.sun.jersey.spi.container.servlet.ServletContainer</filter-class>
-		<init-param>
-			<param-name>com.sun.jersey.config.property.packages</param-name>
-			<param-value>com.houseofmoran.interestingimages</param-value>
-		</init-param>
-		<init-param>
-			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-			<param-value>true</param-value>
-		</init-param>
-		<init-param>
-			<param-name>com.sun.jersey.config.property.JSPTemplatesBasePath</param-name>
-			<param-value>/WEB-INF/jsp</param-value>
-		</init-param>
-		<init-param>
-			<param-name>com.sun.jersey.config.property.WebPageContentRegex</param-name>
-			<param-value>/(js|css|img)/.*</param-value>
-		</init-param>
-	</filter>
+  <listener>
+    <listener-class>com.houseofmoran.util.servlet.RunHeadless</listener-class> 
+  </listener>
 
-	<filter-mapping>
-		<filter-name>jersey-services</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+  <filter>
+    <filter-name>jersey-services</filter-name>
+    <filter-class>com.sun.jersey.spi.container.servlet.ServletContainer</filter-class>
+    <init-param>
+      <param-name>com.sun.jersey.config.property.packages</param-name>
+      <param-value>com.houseofmoran.interestingimages</param-value>
+    </init-param>
+    <init-param>
+      <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>com.sun.jersey.config.property.JSPTemplatesBasePath</param-name>
+      <param-value>/WEB-INF/jsp</param-value>
+    </init-param>
+    <init-param>
+      <param-name>com.sun.jersey.config.property.WebPageContentRegex</param-name>
+      <param-value>/(js|css|img)/.*</param-value>
+    </init-param>
+  </filter>
+  
+  <filter-mapping>
+    <filter-name>jersey-services</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 
 </web-app>
