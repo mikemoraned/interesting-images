@@ -39,6 +39,24 @@ class InterestingImagePartsResource {
 	"animated-jpeg"         -> Interesting.animated(jpeg))
   
   @GET
+  @Path("/all/{uri: .+}")
+  @Produces(Array("text/html"))
+  def all(@PathParam("uri") uri: URI) = {
+    <html>
+    <head>
+    <title>Interesting parts of {uri}</title>
+    </head>
+    <body>
+    <h1>{uri}</h1>
+    <h2>Transformations</h2>
+    { for (name <- imageTransformers.keys.toList.sorted) yield <p><img src={"/" + name + "/" + uri} title={name} /></p> }
+    <h2>Animated</h2>
+    { for (name <- imageAnimators.keys.toList.sorted) yield <p><img src={"/" + name + "/" + uri} title={name} /></p> }
+    </body>
+    </html>.toString()
+  }
+
+  @GET
   @Path("/{spec: [a-z-]+}/{uri: .+}")
   @Produces(Array("image/png"))
   def transformToImage(@PathParam("spec") spec: String, @PathParam("uri") uri: URI) = {
